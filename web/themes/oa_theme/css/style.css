@@ -100,6 +100,8 @@ img::selection, img::-moz-selection {
   background: var(--oa-green);
   color: var(--light-text);
 }
+.bg-red a, .bg-blue a, .bg-grey a, .bg-green a { color: var(--light-text); }
+.bg-red a:hover, .bg-blue a:hover, .bg-grey a:hover, .bg-green a:hover { color: var(--oa-light-grey); }
 .btn {
   font-size: 14px;
   font-weight: 800;
