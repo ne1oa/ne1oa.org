@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Default theme implementation for an 'input' #type form element.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% if attributes.type == 'text' or attributes.type == 'date' or attributes.type == 'time' or attributes.type == 'email' or attributes.type == 'tel' or attributes.type == 'password' or attributes.type == 'search' %}
+	{%
+	  set classes = [
+	    'form-control',
+      attributes.id == 'edit-url-field' ? 'd-none'
+	  ]
+	%}
+{% elseif attributes.type == 'submit' %}
+  {% if not attributes.hasClass('btn') %}
+    {% if attributes.value in ["Submit", "Save", "Log in", "Send message"] %}
+  		{% set classes = ['btn btn-red', ] %}
+  	{% else %}
+  		{% set classes = ['btn btn-blue', ] %}
+  	{% endif %}
+  {% endif %}
+{% else %}
+{% endif %}
+<input{{ attributes.addClass(classes) }} />{{ children }}

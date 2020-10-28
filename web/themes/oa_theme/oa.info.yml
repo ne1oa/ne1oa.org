@@ -1,0 +1,23 @@
+name: OATheme
+description: A Drupal 8/9 theme for Order of the Arrow Lodges & Sections
+type: theme
+base theme: false
+core_version_requirement: ^8 || ^9
+
+libraries:
+  - oa/global-styling-and-scripts
+regions:
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  banner_image: 'Banner Image'
+  banner_text: 'Banner Text'
+  header: Header
+  featured_icons: 'Featured Icons'
+  front_upcoming_events: 'Front Upcoming Events'
+  page_top: 'Page top'
+  content: 'Content'
+  page_bottom: 'Page bottom'
+  right_sidebar: 'Right sidebar'
+  first_footer: 'First footer'
+  second_footer: 'Second footer'
+  third_footer: 'Third footer'

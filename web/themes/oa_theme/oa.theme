@@ -1,0 +1,194 @@
+<?php
+use Drupal\Core\Form\FormStateInterface;
+
+function oa_form_system_theme_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state, $form_id = NULL) {
+  if (isset($form_id)) {
+    return;
+  }
+  $form['navbar_settings'] = array(
+    '#type'         => 'details',
+    '#title'        => t('Navbar Settings'),
+    '#description'  => t('Configure Navbar Settings'),
+    '#weight' => -1000,
+    '#open' => TRUE,
+  );
+  $form['navbar_settings']['logo_bsa'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use "Boy Scouts of America" text.'),
+    '#default_value' => theme_get_setting('logo_bsa'),
+  );
+  $form['navbar_settings']['logo_text'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Logo Text'),
+    '#default_value' => theme_get_setting('logo_text'),
+    '#description'   => t("This text will be placed in the logo image. Max 30 characters."),
+    '#size' => 60,
+    '#maxlength' => 40,
+  );
+  $form['navbar_settings']['red_navbar'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Red Navbar'),
+    '#default_value' => theme_get_setting('red_navbar'),
+  );
+  $form['navbar_settings']['sticky_navbar'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Fix Navbar at Top'),
+    '#description'   => t("Navbar will stay visible when scrolling."),
+    '#default_value' => theme_get_setting('sticky_navbar'),
+  );
+
+  /* Call To Action */
+  $form['call_to_action_settings'] = array(
+    '#type'         => 'details',
+    '#title'        => t('Call To Action Settings'),
+    '#weight' => -999,
+    '#open' => TRUE,
+  );
+  $form['call_to_action_settings']['show_cta'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Call to Action'),
+    '#default_value' => theme_get_setting('show_cta'),
+  );
+  $form['call_to_action_settings']['cta_text'] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Call To Action Text'),
+    '#default_value' => theme_get_setting('cta_text'),
+    '#description'   => t("This text will be placed in the frontpage call to action."),
+  );
+  $form['call_to_action_settings']['cta_btn_text'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Button Text'),
+    '#default_value' => theme_get_setting('cta_btn_text'),
+    '#description'   => t("This text will be placed in the call to action button. Max 20 characters."),
+    '#size' => 60,
+    '#maxlength' => 21,
+  );
+  $form['call_to_action_settings']['cta_btn_link'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Button Link'),
+    '#default_value' => theme_get_setting('cta_btn_link'),
+    '#description'   => t("Call to Action URL"),
+    '#size' => 60,
+  );
+  $form['call_to_action_settings']['cta_new_tab'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Open in New Tab'),
+    '#default_value' => theme_get_setting('cta_new_tab'),
+  );
+  /* Footer */
+  $form['footer_settings'] = array(
+    '#type'         => 'details',
+    '#title'        => t('Footer Settings'),
+    '#weight' => -998,
+    '#open' => TRUE,
+  );
+  $form['footer_settings']['subbrand_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Sub-brand Name'),
+    '#default_value' => theme_get_setting('subbrand_name'),
+    '#description'   => t("Your committee, subcommittee, region, section, or lodge. i.e. Tulpe Lodge or Northeast Region Section 1"),
+    '#size' => 60,
+  );
+  $form['footer_settings']['parent_org_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Parent Organization Name'),
+    '#default_value' => theme_get_setting('parent_org_name'),
+    '#description'   => t("Council or parent committee name. i.e. Narragansett Council, BSA or Order of the Arrow, BSA"),
+    '#size' => 60,
+  );
+}
+
+/**
+* Implements hook_form_id_alter().
+*/
+function oa_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'search_block_form') {
+    $form['keys']['#attributes']['placeholder'] = t('Search');
+  }
+  if ($form_id == 'user_login_form') {
+    $form['name']['#prefix'] = '<div class="col-lg-8 mx-auto text-center card my-4"><div class="card-body"><div class="control-group form-group">';
+    $form['name']['#suffix'] = '</div>';
+    $form['name']['#attributes']['placeholder'][] = $form['name']['#title'].'*';
+    $form['name']['#attributes']['class'][] = 'form-control';
+    $form['name']['#title_display'] = 'invisible';
+    $form['pass']['#prefix'] = '<div class="control-group form-group">';
+    $form['pass']['#suffix'] = '</div>';
+    $form['pass']['#attributes']['placeholder'][] = $form['pass']['#title'].'*';
+    $form['pass']['#attributes']['class'][] = 'form-control';
+    $form['pass']['#title_display'] = 'invisible';
+    $form['actions']['#prefix'] = '<div class="success">';
+    $form['actions']['#suffix'] = '</div></div></div>';
+    $form['actions']['submit']['#attributes']['class'][] = 'btn btn-red';
+    unset($form['name']['#description']);
+    unset($form['pass']['#description']);
+  }
+
+  if ($form_id == 'contact_message_questions_form') {
+    // Name
+    $form['name']['#prefix'] = '<div class="control-group form-group">';
+    $form['name']['#suffix'] = '</div>';
+    $form['name']['#attributes']['placeholder'][] = $form['name']['#title'].'*';
+    $form['name']['#attributes']['class'][] = 'form-control';
+    unset($form['name']['#title']);
+
+    // Mail
+    $form['mail']['#prefix'] = '<div class="control-group form-group">';
+    $form['mail']['#suffix'] = '</div>';
+    $form['mail']['#attributes']['placeholder'][] = $form['mail']['#title'].'*';
+    $form['mail']['#attributes']['class'][] = 'form-control';
+    unset($form['mail']['#title']);
+
+    // Phone
+    $form['field_phone']['widget'][0]['value']['#attributes']['class'][] = 'form-control';
+    $form['field_phone']['widget'][0]['value']['#attributes']['required'][] = 'required';
+    $form['field_phone']['widget'][0]['value']['#attributes']['placeholder'][] = $form['field_phone']['widget'][0]['#title'].'*';
+    $form['field_phone']['widget'][0]['#title'] = '';
+    unset($form['field_phone']['widget'][0]['value']['#title']);
+    $form['field_phone']['widget'][0]['#prefix'] = '<div class="control-group form-group">';
+    $form['field_phone']['widget'][0]['#suffix'] = '</div>';
+
+    // Subject
+    $form['subject']['widget'][0]['value']['#attributes']['class'][] = 'form-control';
+    $form['subject']['widget'][0]['value']['#attributes']['required'][] = 'required';
+    $form['subject']['widget'][0]['value']['#attributes']['placeholder'][] = $form['subject']['widget'][0]['#title'].'*';
+    $form['subject']['widget'][0]['#title'] = '';
+    unset($form['subject']['widget'][0]['value']['#title']);
+    $form['subject']['widget'][0]['#prefix'] = '<div class="control-group form-group">';
+    $form['subject']['widget'][0]['#suffix'] = '</div>';
+
+    // Message
+    $form['message']['widget'][0]['value']['#attributes']['class'][] = 'form-control';
+    $form['message']['widget'][0]['value']['#attributes']['required'][] = 'required';
+    $form['message']['widget'][0]['value']['#attributes']['placeholder'][] = $form['message']['widget'][0]['#title'].'*';
+    $form['message']['widget'][0]['#title'] = '';
+    unset($form['message']['widget'][0]['value']['#title']);
+    $form['message']['widget'][0]['#prefix'] = '<div class="control-group form-group">';
+    $form['message']['widget'][0]['#suffix'] = '</div>';
+
+    // Submit
+    $form['actions']['#prefix'] = '<div class="success">';
+    $form['actions']['#suffix'] = '</div>';
+    $form['actions']['submit']['#attributes']['class'][] = 'btn btn-red';
+    $form['actions']['preview']['#attributes']['class'][] = 'btn btn-blue';
+  }
+}
+
+function oa_preprocess_page(array &$variables) {
+  // Load the site name out of configuration.
+  $config = \Drupal::config('system.site');
+  $variables['site_name'] = $config->get('name');
+  $variables['site_slogan'] = $config->get('slogan');
+  $variables['logo_bsa'] = theme_get_setting('logo_bsa');
+  $variables['logo_text'] = theme_get_setting('logo_text');
+  $variables['red_navbar'] = theme_get_setting('red_navbar');
+  $variables['sticky_navbar'] = theme_get_setting('sticky_navbar');
+
+  $variables['show_cta'] = theme_get_setting('show_cta');
+  $variables['cta_text'] = theme_get_setting('cta_text');
+  $variables['cta_btn_text'] = theme_get_setting('cta_btn_text');
+  $variables['cta_btn_link'] = theme_get_setting('cta_btn_link');
+  $variables['cta_new_tab'] = theme_get_setting('cta_new_tab');
+
+  $variables['subbrand_name'] = theme_get_setting('subbrand_name');
+  $variables['parent_org_name'] = theme_get_setting('parent_org_name');
+}
